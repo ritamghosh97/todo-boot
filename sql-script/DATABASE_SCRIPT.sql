@@ -2,6 +2,7 @@ CREATE USER 'todoapp'@'localhost' IDENTIFIED BY 'todoapp';
 
 GRANT ALL PRIVILEGES ON * . * TO 'todoapp'@'localhost';
 
+CREATE DATABASE IF NOT EXISTS `todo_webapp_database`;
 USE `todo_webapp_database`;
 
 --
@@ -70,8 +71,8 @@ DROP TABLE IF EXISTS `todo`;
 CREATE TABLE `todo` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(200) NOT NULL,
-  `targetDate` DATE NOT NULL,
-  `isDone` BOOLEAN DEFAULT FALSE,
+  `target_date` DATE NOT NULL,
+  `is_done` BOOLEAN DEFAULT FALSE,
   `user_id` INT(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK_USER` FOREIGN KEY (`user_id`) 

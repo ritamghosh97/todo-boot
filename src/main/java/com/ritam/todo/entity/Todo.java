@@ -1,25 +1,34 @@
 package com.ritam.todo.entity;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name="todo")
 public class Todo {
 
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String username;
-
     @Size(min=10, message = "Enter at least 10 characters!")
+    @Column(name="description")
     private String description;
 
     @NotNull(message = "Target Date must not be null!")
     @Future(message = "Target Date must be in future date!")
+    @Column(name="target_date")
     private LocalDate targetDate;
 
+    @Column(name="is_done")
     private boolean isDone;
+
+    private String username;
 
     public Todo(){
 
