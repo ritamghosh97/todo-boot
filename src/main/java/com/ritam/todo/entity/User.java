@@ -3,6 +3,7 @@ package com.ritam.todo.entity;
 import javax.persistence.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name="user")
@@ -35,25 +36,31 @@ public class User {
     )
     private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "user",
+                fetch = FetchType.LAZY)
+    private List<Todo> todos;
+
     public User() {
     }
 
-    public User(String userName, String password, String firstName, String lastName, String email) {
+    public User(String userName, String password, String firstName, String lastName, String email, List<Todo> todos) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.todos = todos;
     }
 
     public User(String userName, String password, String firstName, String lastName, String email,
-                Collection<Role> roles) {
+                Collection<Role> roles, List<Todo> todos) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.roles = roles;
+        this.todos = todos;
     }
 
     public Long getId() {
@@ -112,10 +119,25 @@ public class User {
         this.roles = roles;
     }
 
+    public List<Todo> getTodos() {
+        return todos;
+    }
+
+    public void setTodos(List<Todo> todos) {
+        this.todos = todos;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", userName='" + userName + '\'' + ", password='" + "*********" + '\''
-                + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\''
-                + ", roles=" + roles + '}';
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" + roles +
+                ", todos=" + todos +
+                '}';
     }
 }

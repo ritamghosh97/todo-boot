@@ -1,53 +1,61 @@
 package com.ritam.todo.service;
 
 import com.ritam.todo.entity.Todo;
+import com.ritam.todo.exception.TodoNotFoundException;
+import com.ritam.todo.model.TodoModel;
+import com.ritam.todo.repository.TodoRepository;
+import com.ritam.todo.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.LinkedList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 public class TodoService {
 
-    private static final List<Todo> todos = new LinkedList<>();
+    @Autowired
+    private TodoRepository todoRepository;
 
-    public static final String RITAM_USER_NAME = "ritamghosh97";
+    @Autowired
+    private UserRepository userRepository;
 
-    private static int todoId = 1;
+    private final static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy");
 
-    static {
-        todos.add(new Todo(todoId++, RITAM_USER_NAME, "Learn Spring Boot",
-                LocalDate.now().plusMonths(3), false));
-        todos.add(new Todo(todoId++, RITAM_USER_NAME, "Learn Javascript",
-                LocalDate.now().plusMonths(1), false));
-        todos.add(new Todo(todoId++, RITAM_USER_NAME, "Learn Html",
-                LocalDate.now().plusMonths(2), false));
-        todos.add(new Todo(todoId++, RITAM_USER_NAME, "Learn CSS",
-                LocalDate.now().plusMonths(3), false));
+    public void addTodo(User loggedUser, String description, String targetDate){
+
+        com.ritam.todo.entity.User user
+                = userRepository.findByUserName(loggedUser.getUsername());
+
+        Todo todo = new Todo(user, description, LocalDate.parse(targetDate, formatter), false);
+
+        todoRepository.save(todo);
     }
 
-    public List<Todo> findByUsername(String username){
-        return todos.stream().filter(todo -> todo.getUsername().equalsIgnoreCase(username)).collect(Collectors.toList());
+    public List<Todo> findByUsername(String username) {
+        com.ritam.todo.entity.User user = userRepository.findByUserName(username);
+        return todoRepository.findTodosByUserId(user.getId());
     }
 
-    public void addTodo(String description, LocalDate targetDate){
-        Todo todo = new Todo(todoId++, RITAM_USER_NAME, description, targetDate, false);
-        todos.add(todo);
+    public void deleteById(Integer id) {
+        todoRepository.deleteById(id);
     }
 
-    public void deleteTodoById(int id){
-        todos.removeIf(t -> t.getId() == id);
+    public Todo findById(Integer id) {
+        Optional<Todo> todoOptional = todoRepository.findById(id);
+
+        if(todoOptional.isPresent()){
+            return todoOptional.get();
+        } else {
+            throw new TodoNotFoundException("Todo is not found with id: "+id);
+        }
     }
 
-    public Todo findTodoById(int id) {
-        return todos.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
-    }
-
-    public void updateTodo(Todo todo) {
-        deleteTodoById(todo.getId());
-        todo.setUsername(RITAM_USER_NAME);
-        todos.add(todo);
+    public void updateTodo(TodoModel todo) {
+        LocalDate targetDate = LocalDate.parse(todo.getTargetDate(), formatter);
+        todoRepository.updateTodo(todo.getId(), todo.getDescription(), targetDate, todo.getIsDone());
     }
 }

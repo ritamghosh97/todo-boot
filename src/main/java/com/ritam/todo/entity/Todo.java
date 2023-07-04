@@ -1,5 +1,7 @@
 package com.ritam.todo.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -16,34 +18,26 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Size(min=10, message = "Enter at least 10 characters!")
     @Column(name="description")
     private String description;
 
-    @NotNull(message = "Target Date must not be null!")
-    @Future(message = "Target Date must be in future date!")
     @Column(name="target_date")
+    @DateTimeFormat(pattern = "dd-MMM-yyyy")
     private LocalDate targetDate;
 
     @Column(name="is_done")
     private boolean isDone;
 
-    private String username;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Todo(){
 
     }
 
-    public Todo(Integer id, String username, String description, @NotNull LocalDate targetDate, boolean isDone) {
-        this.id = id;
-        this.username = username;
-        this.description = description;
-        this.targetDate = targetDate;
-        this.isDone = isDone;
-    }
-
-    public Todo(String username, String description, @NotNull LocalDate targetDate, boolean isDone) {
-        this.username = username;
+    public Todo(User user, String description, @NotNull LocalDate targetDate, boolean isDone) {
+        this.user = user;
         this.description = description;
         this.targetDate = targetDate;
         this.isDone = isDone;
@@ -57,12 +51,12 @@ public class Todo {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUserId() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserId(User user) {
+        this.user = user;
     }
 
     public String getDescription() {
@@ -93,7 +87,6 @@ public class Todo {
     public String toString() {
         return "Todo{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
                 ", description='" + description + '\'' +
                 ", targetDate=" + targetDate +
                 ", isDone=" + isDone +

@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -32,7 +33,7 @@
         
         <div class="container">
             <div class="row col-md-10 mt-3 mb-3">
-                <h1>Manage Your Todos</h1>
+                <h1>Hi ${user}, Manage Your Todos</h1>
             </div>
             <table class="table table-bordered table-hover">
                 <thead class="table-dark">
@@ -48,7 +49,11 @@
                     <c:forEach var="todo" items="${todos}">
                         <tr>
                             <td>${todo.description}</td>
-                            <td>${todo.targetDate}</td>
+                            <td>
+                                <fmt:parseDate value="${todo.targetDate}" pattern="yyyy-MM-dd" var="parsedDate" type="date"/>
+                                <fmt:formatDate value="${parsedDate}" var="formattedDate" type="date" pattern="dd-MMM-yyyy"/>
+                                ${formattedDate}
+                            </td>
                             <td>${todo.isDone}</td>
                             <td><a href="${pageContext.request.contextPath}/todo-app/delete-todo?id=${todo.id}" class="btn btn-warning" onclick="return confirm('Are you sure, you want to delete?');">Delete</a></td>
                             <td><a href="${pageContext.request.contextPath}/todo-app/update-todo?id=${todo.id}" class="btn btn-success">Update</a></td>

@@ -34,13 +34,21 @@
             <div class="row col-md-8 offset-md-2">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="text-center">Please Sign Up</h2>
+                        <h2 class="text-center">Sign Up - Todo App</h2>
                     </div>
                     
                     <div>
                         <c:if test="${param.success != null}">
                             <div class="alert alert-info">
                                 You have successfully registered to the todo webapp!
+                            </div>
+                        </c:if>
+                    </div>
+
+                    <div>
+                        <c:if test="${registrationError != null}">
+                            <div class="alert alert-info">
+                                ${registrationError}
                             </div>
                         </c:if>
                     </div>
@@ -61,7 +69,6 @@
                             <div class="form-group mb-4">
                                 <form:label path="password" cssClass="form-label">Password</form:label>
                                 <form:password cssClass="form-control" id="password" path="password" placeholder="Enter password"/>
-                                
                                 <!-- An element to toggle between password visibility -->
                                 <div class="mt-1">
                                     <p class="text-muted">
@@ -76,7 +83,6 @@
                             <div class="form-group mb-4">
                                 <form:label path="confirmPassword" cssClass="form-label">Confirm Password</form:label>
                                 <form:password cssClass="form-control" id="confirmPassword" path="confirmPassword" placeholder="Confirm your password"/>
-                                
                                 <!-- An element to toggle between password visibility -->
                                 <div class="mt-1">
                                     <p class="text-muted">
@@ -121,7 +127,7 @@
                 </div>
             </div>
         </div>
-        <script tyoe="text/javascript">
+        <script type="text/javascript">
             function myFunctionPass() {
                 var x = document.getElementById("password");
                 if (x.type === "password") {
@@ -131,7 +137,7 @@
                 }
             }
         </script>
-        <script tyoe="text/javascript">
+        <script type="text/javascript">
             function myFunctionConfPass() {
                 var x = document.getElementById("confirmPassword");
                 if (x.type === "password") {
