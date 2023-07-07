@@ -64,6 +64,7 @@ public class TodoWebappSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requestConfigurer -> requestConfigurer
                         .antMatchers("/register/**").permitAll()
+                        .antMatchers("/js/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(fromLoginConfigurer -> fromLoginConfigurer
                         .loginPage("/showLoginPage")

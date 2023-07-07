@@ -127,25 +127,8 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript">
-            function myFunctionPass() {
-                var x = document.getElementById("password");
-                if (x.type === "password") {
-                    x.type = "text";
-                } else {
-                    x.type = "password";
-                }
-            }
-        </script>
-        <script type="text/javascript">
-            function myFunctionConfPass() {
-                var x = document.getElementById("confirmPassword");
-                if (x.type === "password") {
-                    x.type = "text";
-                } else {
-                    x.type = "password";
-                }
-            }
-        </script>
+        
+        <script src="/js/showPassword.js"></script>
+        <script src="/js/showConfirmPassword.js"></script>
     </body>
 </html>
